@@ -8,12 +8,14 @@ public class Door : Interactable
     bool opening = false;
     public bool isOpen = false;
     public bool isDoorUp = true;
+    L3Keypad l3Keypad;
     
     // Start is called before the first frame update
     void Start()
     {
         BaseStart();
         doorCover = transform.GetChild(0);
+        l3Keypad = FindObjectOfType<L3Keypad>();
     }
 
     // Update is called once per frame
@@ -46,6 +48,9 @@ public class Door : Interactable
                 }
                 else if (gameObject.name.Equals("l2doorsup")) {
                     if (gm.lockdown) return;
+                }
+                else if (gameObject.name.Equals("l3doorsup")) {
+                    if (!l3Keypad.keypadOpened) return;
                 }
                 else return; // catch-all so doors don't open without condition met
                 opening = true;

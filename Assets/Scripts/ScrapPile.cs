@@ -15,7 +15,8 @@ public abstract class ScrapPile : Interactable
 
     public override void Interact()
     {
-        scavangeScreen.OpenScreen(items);
+        if (items.Count > 0) scavangeScreen.OpenScreen(items);
+        else gm.ShowText("nothing more in this pile");
     }
 
     public override void ResetState()

@@ -47,20 +47,4 @@ public class L2Keypad : Interactable
         
     }
     public override bool IsValidInteractable() {return true;}
-
-    // bool allowKeypadInput = false;
-    
-    // void OnTriggerEnter2D(Collider2D other)
-    // {
-    //     if (other.tag.Equals("player")) {
-    //         allowKeypadInput = true;
-    //     }
-    // }
-
-    // void OnTriggerExit2D(Collider2D other)
-    // {
-    //     if (other.tag.Equals("player")) {
-    //         allowKeypadInput = false;
-    //     }
-    // }
 }

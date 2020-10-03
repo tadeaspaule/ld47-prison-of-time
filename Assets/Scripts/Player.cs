@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.E)) {
             if (dragging) dragging.LetGo();
-            else if (currentInteractables.Count > 0) GetFirstInteractable().Interact();
+            else if (GetValidInteractables().Count > 0) GetFirstInteractable().Interact();
         }
         if (Input.GetKeyDown(KeyCode.Space)) {
             GameObject bubble = Instantiate(bubblePrefab,transform.position+Vector3.up * 0.25f,Quaternion.identity,extraBubbleHolder);
@@ -57,10 +57,15 @@ public class Player : MonoBehaviour
 
     Interactable GetFirstInteractable()
     {
-        List<Interactable> validInteractables = currentInteractables.FindAll(i => i.IsValidInteractable());
+        List<Interactable> validInteractables = GetValidInteractables();
         if (validInteractables.Count == 0) return null;
         foreach (Interactable i in validInteractables) if (i.priorityInteractable) return i;
         return validInteractables[0];
+    }
+
+    List<Interactable> GetValidInteractables()
+    {
+        return currentInteractables.FindAll(i => i.IsValidInteractable());
     }
 
     public void UpdateGameData(string key, string value)

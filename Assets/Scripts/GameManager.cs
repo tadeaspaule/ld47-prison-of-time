@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ChangeLevel(0);
+        ChangeLevel(3);
         playerTA = player.GetComponent<TimeloopAffected>();
             
     }
@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour
     public void RevertPlayer()
     {
         playerTA.Revert();
-        player.WipeGameData();
+        player.WipeGameData(); // -> the character forgets, though the player doesn't? idk if comment or leave
         prisonLevels[0].parent.rotation = Quaternion.identity;
         ChangeLevel(0);
     }

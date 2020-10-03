@@ -8,6 +8,7 @@ TagManager:
   - bubble
   - guardStatue
   - presenceMaskerPart
+  - pcPart
   layers:
   - Default
   - TransparentFX
