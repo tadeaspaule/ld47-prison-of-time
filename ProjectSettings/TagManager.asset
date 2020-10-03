@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - door
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Level3
+    uniqueID: 248369473
+    locked: 0
+  - name: Level2
+    uniqueID: 2595366743
+    locked: 0
+  - name: Level1
+    uniqueID: 3959279995
+    locked: 0
+  - name: Level0
+    uniqueID: 3664531371
+    locked: 0
+  - name: PrisonCore
+    uniqueID: 712401037
+    locked: 0
+  - name: Player
+    uniqueID: 1213067595
+    locked: 0
+  - name: Foreground
+    uniqueID: 1447966149
+    locked: 0
+  - name: Time Fog
+    uniqueID: 2668109445
+    locked: 0
