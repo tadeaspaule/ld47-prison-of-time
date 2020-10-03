@@ -35,7 +35,7 @@ public class Door : Interactable
                 // TODO check interaction condition
                 if (gameObject.name.Equals("l0doorsup")) {
                     Debug.Log(player.carrying);
-                    if (!player.carrying || !player.carrying.name.Equals("keycardtolevel1")) return;
+                    if (!player.carrying || !player.carrying.name.Contains("keycard")) return;
                     else {
                         player.carrying.UseCarriable();
                     }
@@ -43,6 +43,9 @@ public class Door : Interactable
                 else if (gameObject.name.Equals("l1doorsup")) {
                     Scanner[] scanners = FindObjectsOfType<Scanner>();
                     foreach (Scanner s in scanners) if (!s.scannerHappy) return;
+                }
+                else if (gameObject.name.Equals("l2doorsup")) {
+                    if (gm.lockdown) return;
                 }
                 else return; // catch-all so doors don't open without condition met
                 opening = true;

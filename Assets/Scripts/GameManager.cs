@@ -8,15 +8,15 @@ public class GameManager : MonoBehaviour
 {
     public bool paused = false;
     public bool blockInput = false;
+    public bool lockdown = false;
     
     // Start is called before the first frame update
     void Start()
     {
-        ChangeLevel(2);
+        ChangeLevel(0);
         playerTA = player.GetComponent<TimeloopAffected>();
+            
     }
-
-    bool lockdown = true;
 
     // Update is called once per frame
     void Update()
@@ -105,21 +105,29 @@ public class GameManager : MonoBehaviour
     int level = 0;
     Color litLevelColor = new Color(0.2f,0.18f,0.18f);
     public ScavangeScreen scavangeScreen;
+    public GuardOffice guardOffice;
 
     void ChangeLevel(int newLevel)
     {
         SpriteRenderer sr;
         for (int i = 0; i < 4; i++) {
-            float alpha = i == newLevel ? 1f : 0f;
-            foreach (Transform levelChild in prisonLevels[i]) {
-                SetAlphaOfChildren(levelChild,alpha);
-            }
-            sr = prisonLevels[i].GetComponent<SpriteRenderer>();
-            sr.color = alpha > 0.5f ? litLevelColor : Color.black;
+            // float alpha = i == newLevel ? 1f : 0f;
+            // foreach (Transform levelChild in prisonLevels[i]) {
+            //     SetAlphaOfChildren(levelChild,alpha);
+            // }
+            // sr = prisonLevels[i].GetComponent<SpriteRenderer>();
+            // sr.color = alpha > 0.5f ? litLevelColor : Color.black;
             levelHiders[i].SetActive(i != newLevel);
         }
         level = newLevel;
         player.transform.position = Vector3.up * (2.52f + newLevel * 0.625f);
+        UpdateLockdown();
+    }
+
+    public void UpdateLockdown()
+    {
+        lockdown = level != 0 && !guardOffice.IsSubstituteComplete();
+        foreach (Transform level in prisonLevels) level.GetComponent<PrisonLevel>().ToggleLockdown(lockdown);
     }
 
     void SetAlphaOfChildren(Transform parent, float alpha)

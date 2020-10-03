@@ -22,6 +22,10 @@ public abstract class Draggable : Interactable
         // transform.rotation = Quaternion.identity;
         gm.ShowText($"dragging {gameObject.name}");
     }
+    public override void Interact()
+    {
+        BasicDraggableInteract();
+    }
     public override void ResetState()
     {
         player.dragging = null;

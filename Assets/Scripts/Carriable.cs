@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class Carriable : Interactable
 {    
+    public bool destroyOnUse = true;
+    
     void Start()
     {
         BaseStart();
         priorityInteractable = true;
+    }
+
+    public void ForceSetup(Player player, GameManager gameManager)
+    {
+        this.player = player;
+        this.gm = gameManager;
     }
 
     public override void Interact()
@@ -29,6 +37,7 @@ public class Carriable : Interactable
     {
         transform.position = new Vector3(50f,50f,0f); // to hide it
         player.carrying = null;
+        if (destroyOnUse) Destroy(gameObject);
     }
     public override bool IsValidInteractable() {return true;}
 }

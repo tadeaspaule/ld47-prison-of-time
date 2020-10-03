@@ -28,6 +28,8 @@ public class ScavangeScreen : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.E)) {
             GameObject go = Instantiate(scrapCarriablePrefab,Vector3.zero,Quaternion.identity);
+            go.name = items[itemIndex].name;
+            if (items[itemIndex].tag != null) go.tag = items[itemIndex].tag;
             ScrapCarriable sc = go.GetComponent<ScrapCarriable>();
             sc.SetupSC(gm,player,items[itemIndex]);
             sc.Interact();
@@ -48,8 +50,7 @@ public class ScavangeScreen : MonoBehaviour
     {
         gm.blockInput = true;
         gameObject.SetActive(true);
-        items.Clear();
-        foreach (ScrapItem item in inItems) items.Add(item);
+        items = inItems;
         itemIndex = 0;
         UpdateItemDisplay();
     }

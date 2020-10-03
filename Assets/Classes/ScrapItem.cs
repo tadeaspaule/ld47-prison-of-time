@@ -5,6 +5,7 @@ public class ScrapItem
 {
     public string name;
     public string description;
+    public string tag;
 
     public Sprite GetSprite()
     {
