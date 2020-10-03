@@ -65,6 +65,9 @@ TagManager:
   - name: Foreground
     uniqueID: 1447966149
     locked: 0
+  - name: LevelHider
+    uniqueID: 3176338401
+    locked: 0
   - name: Time Fog
     uniqueID: 2668109445
     locked: 0

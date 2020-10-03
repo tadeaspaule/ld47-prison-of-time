@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
         playerTA = player.GetComponent<TimeloopAffected>();
     }
 
+    bool lockdown = true;
+
     // Update is called once per frame
     void Update()
     {
@@ -25,6 +27,10 @@ public class GameManager : MonoBehaviour
                 textChainIndex++;
                 UpdateTextPanel();
             }
+        }
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            lockdown = !lockdown;
+            foreach (Transform level in prisonLevels) level.GetComponent<PrisonLevel>().ToggleLockdown(lockdown);
         }
         loopIndicator.fillAmount = 1 - (playerTA.timer / TimeloopAffected.maxTimer);
     }
@@ -95,6 +101,7 @@ public class GameManager : MonoBehaviour
 
     public Player player;
     public Transform[] prisonLevels;
+    public GameObject[] levelHiders;
     int level = 0;
     Color litLevelColor = new Color(0.2f,0.18f,0.18f);
     public ScavangeScreen scavangeScreen;
@@ -109,6 +116,7 @@ public class GameManager : MonoBehaviour
             }
             sr = prisonLevels[i].GetComponent<SpriteRenderer>();
             sr.color = alpha > 0.5f ? litLevelColor : Color.black;
+            levelHiders[i].SetActive(i != newLevel);
         }
         level = newLevel;
         player.transform.position = Vector3.up * (2.52f + newLevel * 0.625f);
