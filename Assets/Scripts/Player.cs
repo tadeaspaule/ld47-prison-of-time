@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public GameObject bubblePrefab;
+    public Transform extraBubbleHolder;
     public Transform prisonHolder;
     GameManager gm;
     float sideMovement = 300f;
@@ -28,22 +30,29 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && currentInteractable != null) {
             currentInteractable.Interact();
         }
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            GameObject bubble = Instantiate(bubblePrefab,transform.position+Vector3.up * 0.25f,Quaternion.identity,extraBubbleHolder);
+        }
     }
 
     public Interactable currentInteractable;
     public Interactable carrying;
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("enter");
-        Debug.Log(other);
+        if (other.tag.Equals("bubble")) {
+            gm.PlayerEnteredBubble();
+        }
+        Debug.Log($"enter {other.gameObject.name}");
         Interactable i = other.GetComponent<Interactable>();
-        if (i) currentInteractable = i;
+        if (i && (!currentInteractable || !currentInteractable.priorityInteractable)) currentInteractable = i;
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("exit");
-        Debug.Log(other);
+        if (other.tag.Equals("bubble")) {
+            gm.PlayerLeftBubble();
+        }
+        Debug.Log($"exit {other.gameObject.name}");
         Interactable i = other.GetComponent<Interactable>();
         if (i && i == currentInteractable) currentInteractable = null;
     }

@@ -8,6 +8,7 @@ public abstract class Interactable : MonoBehaviour
     protected Player player;
     public abstract void Interact();
     public abstract void ResetState(); // called on timeloop trigger
+    public bool priorityInteractable = false;
 
     protected void BaseStart()
     {

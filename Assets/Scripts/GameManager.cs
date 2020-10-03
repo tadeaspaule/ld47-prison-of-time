@@ -19,11 +19,12 @@ public class GameManager : MonoBehaviour
     {
         if (showingText) {
             if (Input.GetKeyDown(KeyCode.E)) {
+                Debug.Log("etext");
                 textChainIndex++;
                 UpdateTextPanel();
             }
         }
-        timer += Time.deltaTime;
+        timer += Time.deltaTime * timerMult;
         if (timer >= maxTimer) RevertAll();
         loopIndicator.fillAmount = 1 - (timer / maxTimer);
     }
@@ -68,13 +69,15 @@ public class GameManager : MonoBehaviour
         textChainIndex = 0;
         textPanel.SetActive(true);
         UpdateTextPanel();
+        SetPause(true);
     }
 
     void UpdateTextPanel()
     {
         if (textChainIndex >= currentTextChain.Length) {
-            textPanel.SetActive(true);
+            textPanel.SetActive(false);
             showingText = false;
+            SetPause(false);
             return;
         }
         text.text = currentTextChain[textChainIndex];
@@ -132,6 +135,7 @@ public class GameManager : MonoBehaviour
     #region Timeloop stuff
 
     float timer = 0f;
+    float timerMult = 1f;
     const float maxTimer = 5f;
     public Image loopIndicator;
 
@@ -148,6 +152,16 @@ public class GameManager : MonoBehaviour
         foreach (TimeloopAffected ta in timeloopAffecteds) ta.Revert();
         timer = 0f;
         ChangeLevel(0);
+    }
+
+    public void PlayerEnteredBubble()
+    {
+        timerMult = 0f;
+    }
+
+    public void PlayerLeftBubble()
+    {
+        timerMult = 1f;
     }
 
     #endregion
