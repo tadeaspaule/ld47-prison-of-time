@@ -38,8 +38,11 @@ public class Door : Interactable
                     if (!player.carrying || !player.carrying.name.Equals("keycardtolevel1")) return;
                     else {
                         player.carrying.UseCarriable();
-                        player.currentInteractable = this;
                     }
+                }
+                else if (gameObject.name.Equals("l1doorsup")) {
+                    Scanner[] scanners = FindObjectsOfType<Scanner>();
+                    foreach (Scanner s in scanners) if (!s.scannerHappy) return;
                 }
                 opening = true;
             }

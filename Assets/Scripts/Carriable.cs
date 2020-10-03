@@ -13,7 +13,7 @@ public class Carriable : Interactable
     public override void Interact()
     {
         player.carrying = this;
-        player.currentInteractable = null;
+        player.currentInteractables.Remove(this);
         transform.parent = player.transform;
         transform.localPosition = Vector3.zero;
         transform.rotation = Quaternion.identity;
@@ -29,6 +29,5 @@ public class Carriable : Interactable
     {
         transform.position = new Vector3(50f,50f,0f); // to hide it
         player.carrying = null;
-        player.currentInteractable = null;
     }
 }

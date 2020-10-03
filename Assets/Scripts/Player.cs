@@ -27,27 +27,36 @@ public class Player : MonoBehaviour
         else if (Input.GetKey(KeyCode.A)) {
             prisonHolder.Rotate(0f,0f,-rotateSpeed);
         }
-        if (Input.GetKeyDown(KeyCode.E) && currentInteractable != null) {
-            currentInteractable.Interact();
+        if (Input.GetKeyDown(KeyCode.E)) {
+            if (dragging) dragging.LetGo();
+            else if (currentInteractables.Count > 0) GetFirstInteractable().Interact();
         }
         if (Input.GetKeyDown(KeyCode.Space)) {
             GameObject bubble = Instantiate(bubblePrefab,transform.position+Vector3.up * 0.25f,Quaternion.identity,extraBubbleHolder);
         }
     }
 
-    public Interactable currentInteractable;
+    public List<Interactable> currentInteractables = new List<Interactable>();
     public Carriable carrying;
+    public Draggable dragging;
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log($"enter {other.gameObject.name}");
         Interactable i = other.GetComponent<Interactable>();
-        if (i && (!currentInteractable || !currentInteractable.priorityInteractable)) currentInteractable = i;
+        if (i) currentInteractables.Add(i);
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         Debug.Log($"exit {other.gameObject.name}");
         Interactable i = other.GetComponent<Interactable>();
-        if (i && i == currentInteractable) currentInteractable = null;
+        if (i) currentInteractables.Remove(i);
+    }
+
+    Interactable GetFirstInteractable()
+    {
+        if (currentInteractables.Count == 0) return null;
+        foreach (Interactable i in currentInteractables) if (i.priorityInteractable) return i;
+        return currentInteractables[0];
     }
 }

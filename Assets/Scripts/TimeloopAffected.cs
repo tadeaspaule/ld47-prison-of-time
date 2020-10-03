@@ -17,7 +17,7 @@ public class TimeloopAffected : MonoBehaviour
     GameManager gm;
 
     public float timer = 0f;
-    public static float maxTimer = 5f;
+    public static float maxTimer = 50f;
     bool inBubble = false;
 
 
