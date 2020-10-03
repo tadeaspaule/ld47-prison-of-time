@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Draggable : Interactable
+public abstract class Draggable : Interactable
 {    
     Transform oParent;
-    
-    void Start()
+
+    protected void DraggableSetup()
     {
         BaseStart();
         priorityInteractable = true;
         oParent = transform.parent;
     }
 
-    public override void Interact()
+    protected void BasicDraggableInteract()
     {
         player.dragging = this;
         player.currentInteractables.Remove(this);
@@ -22,11 +22,11 @@ public class Draggable : Interactable
         // transform.rotation = Quaternion.identity;
         gm.ShowText($"dragging {gameObject.name}");
     }
-
     public override void ResetState()
     {
-        player.carrying = null;
+        player.dragging = null;
     }
+    public override bool IsValidInteractable() {return true;}
 
     public void LetGo()
     {

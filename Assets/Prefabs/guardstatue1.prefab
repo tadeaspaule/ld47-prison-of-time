@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 514014504964479018}
   - component: {fileID: 514014504964479017}
   - component: {fileID: 514014504964479023}
-  - component: {fileID: 514014504964479016}
+  - component: {fileID: 8681693604429622978}
   m_Layer: 0
   m_Name: guardstatue1
   m_TagString: guardStatue
@@ -109,7 +109,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.6, y: 1}
   m_EdgeRadius: 0
---- !u!114 &514014504964479016
+--- !u!114 &8681693604429622978
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 514014504964479019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 230981019adba2741b66c014ae3ceb56, type: 3}
+  m_Script: {fileID: 11500000, guid: b453cc78ca481944d9ab4548a63a20b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   priorityInteractable: 0

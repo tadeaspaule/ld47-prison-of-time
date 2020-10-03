@@ -15,4 +15,6 @@ public abstract class Interactable : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         player = FindObjectOfType<Player>();
     }
+
+    public abstract bool IsValidInteractable();
 }

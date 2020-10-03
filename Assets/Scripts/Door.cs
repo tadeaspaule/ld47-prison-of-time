@@ -44,6 +44,7 @@ public class Door : Interactable
                     Scanner[] scanners = FindObjectsOfType<Scanner>();
                     foreach (Scanner s in scanners) if (!s.scannerHappy) return;
                 }
+                else return; // catch-all so doors don't open without condition met
                 opening = true;
             }
             else opening = true; // just open doors down, no conditions needed
@@ -61,4 +62,5 @@ public class Door : Interactable
         opening = false;
         isOpen = false;
     }
+    public override bool IsValidInteractable() {return true;}
 }

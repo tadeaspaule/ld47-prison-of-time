@@ -27,7 +27,7 @@ public class TimeloopAffected : MonoBehaviour
     {
         gm = FindObjectOfType<GameManager>();
         oPosition = new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z);
-        Debug.Log($"{gameObject.name} {oPosition}");
+        // Debug.Log($"{gameObject.name} {oPosition}");
         Vector3 oRotationVect = transform.localRotation.eulerAngles;
         oRotation = Quaternion.Euler(oRotationVect.x,oRotationVect.y,oRotationVect.z);
         oParent = transform.parent;

@@ -30,4 +30,5 @@ public class Carriable : Interactable
         transform.position = new Vector3(50f,50f,0f); // to hide it
         player.carrying = null;
     }
+    public override bool IsValidInteractable() {return true;}
 }

@@ -7,11 +7,12 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public bool paused = false;
+    public bool blockInput = false;
     
     // Start is called before the first frame update
     void Start()
     {
-        ChangeLevel(0);
+        ChangeLevel(2);
         playerTA = player.GetComponent<TimeloopAffected>();
     }
 
@@ -64,11 +65,17 @@ public class GameManager : MonoBehaviour
 
     void ShowText()
     {
-        showingText = true;
+        StartCoroutine(DelayedSetShowingText());
         textChainIndex = 0;
         textPanel.SetActive(true);
         UpdateTextPanel();
         SetPause(true);
+    }
+
+    IEnumerator DelayedSetShowingText()
+    {
+        yield return new WaitForEndOfFrame();
+        showingText = true;
     }
 
     void UpdateTextPanel()
@@ -90,6 +97,7 @@ public class GameManager : MonoBehaviour
     public Transform[] prisonLevels;
     int level = 0;
     Color litLevelColor = new Color(0.2f,0.18f,0.18f);
+    public ScavangeScreen scavangeScreen;
 
     void ChangeLevel(int newLevel)
     {
@@ -146,6 +154,7 @@ public class GameManager : MonoBehaviour
     public void RevertPlayer()
     {
         playerTA.Revert();
+        player.WipeGameData();
         prisonLevels[0].parent.rotation = Quaternion.identity;
         ChangeLevel(0);
     }
