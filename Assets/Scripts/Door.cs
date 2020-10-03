@@ -37,8 +37,7 @@ public class Door : Interactable
                     Debug.Log(player.carrying);
                     if (!player.carrying || !player.carrying.name.Equals("keycardtolevel1")) return;
                     else {
-                        player.carrying.gameObject.SetActive(false);
-                        player.carrying = null;
+                        player.carrying.UseCarriable();
                         player.currentInteractable = this;
                     }
                 }

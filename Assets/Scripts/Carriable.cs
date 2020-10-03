@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Carriable : Interactable
-{
+{    
     void Start()
     {
         BaseStart();
@@ -23,5 +23,12 @@ public class Carriable : Interactable
     public override void ResetState()
     {
         player.carrying = null;
+    }
+
+    public void UseCarriable()
+    {
+        transform.position = new Vector3(50f,50f,0f); // to hide it
+        player.carrying = null;
+        player.currentInteractable = null;
     }
 }

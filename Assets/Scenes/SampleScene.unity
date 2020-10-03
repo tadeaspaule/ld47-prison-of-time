@@ -358,6 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971dfc8257150b2409d964c59298c64e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 0
 --- !u!1001 &417944510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -825,6 +826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971dfc8257150b2409d964c59298c64e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 0
 --- !u!212 &859941793
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1869,7 +1871,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1523104288}
-  - component: {fileID: 1523104289}
   m_Layer: 0
   m_Name: prison
   m_TagString: Untagged
@@ -1897,18 +1898,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1523104289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523104287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 971dfc8257150b2409d964c59298c64e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1591432960
 GameObject:
   m_ObjectHideFlags: 0

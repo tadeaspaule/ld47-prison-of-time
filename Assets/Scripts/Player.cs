@@ -36,12 +36,9 @@ public class Player : MonoBehaviour
     }
 
     public Interactable currentInteractable;
-    public Interactable carrying;
+    public Carriable carrying;
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag.Equals("bubble")) {
-            gm.PlayerEnteredBubble();
-        }
         Debug.Log($"enter {other.gameObject.name}");
         Interactable i = other.GetComponent<Interactable>();
         if (i && (!currentInteractable || !currentInteractable.priorityInteractable)) currentInteractable = i;
@@ -49,9 +46,6 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag.Equals("bubble")) {
-            gm.PlayerLeftBubble();
-        }
         Debug.Log($"exit {other.gameObject.name}");
         Interactable i = other.GetComponent<Interactable>();
         if (i && i == currentInteractable) currentInteractable = null;

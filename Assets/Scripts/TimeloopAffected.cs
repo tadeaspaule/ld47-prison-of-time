@@ -16,12 +16,16 @@ public class TimeloopAffected : MonoBehaviour
     Collider2D collider2d;
     GameManager gm;
 
+    public float timer = 0f;
+    public static float maxTimer = 5f;
+    bool inBubble = false;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
-        gm.AddTimeloopAffected(this);
         oPosition = new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z);
         Debug.Log($"{gameObject.name} {oPosition}");
         Vector3 oRotationVect = transform.localRotation.eulerAngles;
@@ -36,20 +40,20 @@ public class TimeloopAffected : MonoBehaviour
         collider2d = GetComponent<Collider2D>();
     }
 
-    public void Revert()
+    void Update()
     {
-        bool inBubble = false;
-        if (collider2d && gameObject.activeSelf) {
-            Debug.Log($"checking {gameObject.name} for bubble overlap");
-            foreach (Transform bubble in gm.player.extraBubbleHolder) {
-                if (collider2d && collider2d.IsTouching(bubble.GetComponent<Collider2D>())) {
-                    Debug.Log("bubble touching");
-                    inBubble = true;
-                    break;
-                }
+        if (gm.paused) return;
+        if (!inBubble) timer += Time.deltaTime;
+        if (timer >= maxTimer) {
+            if (!gameObject.name.Equals("player")) Revert();
+            else {
+                gm.RevertPlayer();
             }
         }
-        
+    }
+
+    public void Revert()
+    {        
         if (inBubble) {
             Debug.Log($"{gameObject.name} in bubble");
             return;
@@ -65,17 +69,19 @@ public class TimeloopAffected : MonoBehaviour
         if (interactable) interactable.ResetState();
     }
 
-    // void OnTriggerEnter2D(Collider2D other)
-    // {
-    //     if (other.tag.Equals("bubble")) {
-    //         Debug.Log($"{gameObject.name} enterd bubble");
-    //     }
-    // }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag.Equals("bubble")) {
+            // Debug.Log($"{gameObject.name} enterd bubble");
+            inBubble = true;
+        }
+    }
 
-    // void OnTriggerExit2D(Collider2D other)
-    // {
-    //     if (other.tag.Equals("bubble")) {
-    //         Debug.Log($"{gameObject.name} left bubble");
-    //     }
-    // }
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag.Equals("bubble")) {
+            // Debug.Log($"{gameObject.name} left bubble");
+            inBubble = false;
+        }
+    }
 }

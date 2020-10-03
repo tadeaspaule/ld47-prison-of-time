@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ChangeLevel(0);
+        playerTA = player.GetComponent<TimeloopAffected>();
     }
 
     // Update is called once per frame
@@ -24,9 +25,7 @@ public class GameManager : MonoBehaviour
                 UpdateTextPanel();
             }
         }
-        timer += Time.deltaTime * timerMult;
-        if (timer >= maxTimer) RevertAll();
-        loopIndicator.fillAmount = 1 - (timer / maxTimer);
+        loopIndicator.fillAmount = 1 - (playerTA.timer / TimeloopAffected.maxTimer);
     }
 
     void SetPause(bool newValue)
@@ -134,10 +133,8 @@ public class GameManager : MonoBehaviour
 
     #region Timeloop stuff
 
-    float timer = 0f;
-    float timerMult = 1f;
-    const float maxTimer = 5f;
     public Image loopIndicator;
+    TimeloopAffected playerTA;
 
     List<TimeloopAffected> timeloopAffecteds = new List<TimeloopAffected>();
 
@@ -146,22 +143,11 @@ public class GameManager : MonoBehaviour
         timeloopAffecteds.Add(ta);
     }
 
-    void RevertAll()
+    public void RevertPlayer()
     {
-        Debug.Log("reverting all");
-        foreach (TimeloopAffected ta in timeloopAffecteds) ta.Revert();
-        timer = 0f;
+        playerTA.Revert();
+        prisonLevels[0].parent.rotation = Quaternion.identity;
         ChangeLevel(0);
-    }
-
-    public void PlayerEnteredBubble()
-    {
-        timerMult = 0f;
-    }
-
-    public void PlayerLeftBubble()
-    {
-        timerMult = 1f;
     }
 
     #endregion
