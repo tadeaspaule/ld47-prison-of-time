@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -13,9 +14,15 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ChangeLevel(0);
         playerTA = player.GetComponent<TimeloopAffected>();
         Cursor.visible = false;
+        StartLoop();
+    }
+
+    void StartLoop()
+    {
+        ChangeLevel(0);
+        ShowText("I shouldn't be in this cell! I'm getting out!");
     }
 
     // Update is called once per frame
@@ -109,10 +116,19 @@ public class GameManager : MonoBehaviour
     public Player player;
     public Transform[] prisonLevels;
     public GameObject[] levelHiders;
-    int level = 0;
+    public int level = 0;
     Color litLevelColor = new Color(0.2f,0.18f,0.18f);
     public ScavangeScreen scavangeScreen;
     public GuardOffice guardOffice;
+
+    public Animation freedomPanelAnim;
+
+    public void GameWon()
+    {
+        blockInput = true;
+        paused = true;
+        freedomPanelAnim.Play("freedompanelfadein");
+    }
 
     void ChangeLevel(int newLevel)
     {
@@ -182,7 +198,21 @@ public class GameManager : MonoBehaviour
         // player.WipeGameData(); // -> the character forgets, though the player doesn't? idk if comment or leave
         player.prisonHolder.rotation = Quaternion.Euler(0f,0f,30f);
         player.bubbleTools.Clear();
-        ChangeLevel(0);
+        UpdateBubbleCounter();
+        if (player.carrying && player.carrying.destroyOnUse) Destroy(player.carrying.gameObject);
+        player.carrying = null;
+        if (player.dragging) player.dragging.GetComponent<TimeloopAffected>().Revert(); // guard statues
+        player.dragging = null;
+        player.currentInteractables.Clear();
+        StartLoop();
+    }
+
+    public TextMeshProUGUI bubbleCounter;
+
+    public void AddBubbleTool(string name)
+    {
+        player.bubbleTools.Add(name);
+        UpdateBubbleCounter();
     }
 
     public void PlaceBubble(Vector3 position)
@@ -192,6 +222,14 @@ public class GameManager : MonoBehaviour
         bubble.name = $"l{level}bubble";
         if (player.GetGameData("placedfirstbubble") == null) StartCoroutine(DelayedShowText("Yikes, that bubble looks unstable. Hopefully it doesn't break on me.",0.6f));
         player.UpdateGameData("placedfirstbubble","true");
+        player.placedBubbletools.Add(player.bubbleTools[0]);
+        player.bubbleTools.RemoveAt(0);
+        UpdateBubbleCounter();
+    }
+
+    public void UpdateBubbleCounter()
+    {
+        bubbleCounter.text = player.bubbleTools.Count.ToString();
     }
 
     #endregion
@@ -211,6 +249,11 @@ public class GameManager : MonoBehaviour
         TogglePause();
     }
 
+    public void GoMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
     void TogglePause()
     {
         bool prevActive = pauseUI.activeSelf;
@@ -226,8 +269,11 @@ public class GameManager : MonoBehaviour
         TogglePause();
         player.placedBubbletools.Clear();
         player.bubbleTools.Clear();
+        UpdateBubbleCounter();
         player.WipeGameData();
         foreach (TimeloopAffected ta in allTA) ta.Revert();
+        foreach (Transform bubble in extraBubbleHolder) Destroy(bubble.gameObject);
+        usedItems.Clear();
         RevertPlayer();
     }
 

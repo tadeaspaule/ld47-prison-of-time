@@ -17,7 +17,7 @@ public class BubblePile : Interactable
             gm.ShowTextChain(new string[]{
                 "Oh great! Another emergency Bubble Tool!"
             });
-            player.bubbleTools.Add(toolName);
+            gm.AddBubbleTool(toolName);
             tookBubble = true;
         }
         else {

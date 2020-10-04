@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     Dictionary<string,string> gamedata = new Dictionary<string, string>();
     GameManager gm;
     Transform objectHolder;
+    public Collider2D playerCollider;
     float sideMovement = 120f;
     bool moving = false;
     float movingTilt = 0f;
@@ -63,8 +64,6 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space) && bubbleTools.Count > 0) {
             gm.PlaceBubble(transform.position+Vector3.up * 0.25f);
-            placedBubbletools.Add(bubbleTools[0]);
-            bubbleTools.RemoveAt(0);
         }
     }
 
@@ -97,7 +96,7 @@ public class Player : MonoBehaviour
 
     List<Interactable> GetValidInteractables()
     {
-        return currentInteractables.FindAll(i => i.IsValidInteractable());
+        return currentInteractables.FindAll(i => i.IsValidInteractable() && i.GetComponent<Collider2D>().IsTouching(playerCollider));
     }
 
     public void UpdateGameData(string key, string value)

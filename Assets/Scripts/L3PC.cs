@@ -43,6 +43,7 @@ public class L3PC : Interactable
         }
         else if (player.carrying && player.carrying.tag.Equals("pcPart")) {
             neededParts.Remove(player.carrying.name);
+            gm.usedItems.Add(player.carrying.name);
             player.carrying.UseCarriable();
             if (neededParts.Count == 0) {
                 pcScreen.color = onColor;
@@ -59,14 +60,18 @@ public class L3PC : Interactable
             gm.ShowText($"The passcode is {keypad.correctCode}");
         }
         else if (!player.carrying && !player.dragging) {
-            if (neededParts[0] == "Fuel cell") gm.ShowText($"I still need a power source");
+            if (neededParts.Count == 2) gm.ShowText("I need to restore power to this computer");
+            else if (neededParts[0] == "Fuel cell") gm.ShowText($"I still need a power source");
             else gm.ShowText($"I still need a way to connect the fuel cell to the computer");
         }
     }
     public override void ResetState()
     {
         neededParts.Clear();
-        foreach (string n in partNames) neededParts.Add(n);
+        foreach (string n in partNames) {
+            neededParts.Add(n);
+            if (gm.usedItems.Contains(n)) gm.usedItems.Remove(n);
+        }
         pcScreen.color = offColor;
         pcModel.SetActive(false);
         sr.enabled = true;

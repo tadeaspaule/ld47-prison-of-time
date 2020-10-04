@@ -6,6 +6,7 @@ public class L1Debris : Interactable
 {
     string[] initialText;
     int bubblesInPile = 2;
+    public GameObject bubbleIndicator;
 
     void Start()
     {
@@ -17,20 +18,23 @@ public class L1Debris : Interactable
             "...",
             "Aha! Two emergency Time Bubble tools! This will definitely be useful",
             "(press Space to deploy Time Bubbles)",
-            "(Time Bubbles free everything inside them from the prison's time loop)"
+            "(Time Bubbles free everything inside them from the prison's time loop)",
+            "(Use them carefully! If not placed correctly, you will have to restart your run)"
         };
     }
     public override void Interact()
     {
         ResetState(); // kinda cheat since they get out of sync and it's unclear and annoying (though it makes sense)
         if (bubblesInPile > 0) {
-            initialText[4] = bubblesInPile > 1  ? "Aha! Two emergency Time Bubble tools! These will definitely be useful" : "Aha! An Time Bubble tool! This will definitely be useful";
+            bubbleIndicator.SetActive(true);
+            gm.UpdateBubbleCounter();
+            initialText[4] = bubblesInPile > 1  ? "Aha! Two emergency Time Bubble tools! These will definitely be useful" : "Aha! A Time Bubble tool! This will definitely be useful";
             gm.ShowTextChain(initialText);
             // potentially gets rid of the tutorial information so you only read it once
             string[] t = new string[5];
             for (int i = 0; i < 5; i++) t[i] = initialText[i];
             initialText = t;
-            for (int i = 0; i < bubblesInPile; i++) player.bubbleTools.Add($"l1debrisbubble{i}");
+            for (int i = 0; i < bubblesInPile; i++) gm.AddBubbleTool($"l1debrisbubble{i}");
             bubblesInPile = 0;
         }
         else {

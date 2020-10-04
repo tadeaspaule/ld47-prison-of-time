@@ -49,6 +49,11 @@ public class Door : Interactable
                     }
                 }
                 opening = true;
+                if (gm.level == 3) {
+                    // beat the game, got out of the prison
+                    gm.GameWon();
+                    return;
+                }
             }
             else opening = true; // just open doors down, no conditions needed
         }
@@ -91,5 +96,5 @@ public class Door : Interactable
         CloseDoor();
         hasBeenUnlocked = false;
     }
-    public override bool IsValidInteractable() {Debug.Log(CanOpen());return isOpen || !isDoorUp || hasBeenUnlocked || CanOpen();}
+    public override bool IsValidInteractable() {Debug.Log(CanOpen());Debug.Log(hasBeenUnlocked);return isOpen || !isDoorUp || hasBeenUnlocked || CanOpen();}
 }

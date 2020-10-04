@@ -51,6 +51,12 @@ public class GuardOffice : Interactable
             });
             tookKeycard = true;
         }
+        else if (player.GetGameData("sawl2keypad") != null) {
+            string t = "I still need ";
+            for (int i = 0; i < neededMaskerParts.Count; i++) t += concreteToVague[neededMaskerParts[i]] + " and ";
+            t = t.Substring(0,t.Length-5) + ".";
+            gm.ShowText(t);
+        }
         else if (tookKeycard) {
             gm.ShowTextChain(new string[]{
                 "What a gruesome sight...",
@@ -66,7 +72,10 @@ public class GuardOffice : Interactable
         tookKeycard = false;
         if (l0Door.hasBeenUnlocked) tookKeycard = true;
         neededMaskerParts.Clear();
-        foreach (string n in maskerPartNames) neededMaskerParts.Add(n);
+        foreach (string n in maskerPartNames) {
+            neededMaskerParts.Add(n);
+            if (gm.usedItems.Contains(n)) gm.usedItems.Remove(n);
+        }
     }
 
     public bool IsSubstituteComplete()
