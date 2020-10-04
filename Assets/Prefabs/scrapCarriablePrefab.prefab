@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
+  resetParent: 0
+  destroyOnTimeout: 1
 --- !u!114 &1788153705927978363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,6 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priorityInteractable: 0
+  hintName: 
   destroyOnUse: 1
   item:
     name: 

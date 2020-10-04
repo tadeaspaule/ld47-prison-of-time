@@ -13,8 +13,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ChangeLevel(1);
+        ChangeLevel(0);
         playerTA = player.GetComponent<TimeloopAffected>();
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -27,10 +28,11 @@ public class GameManager : MonoBehaviour
                 UpdateTextPanel();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Q)) {
-            lockdown = !lockdown;
-            foreach (Transform level in prisonLevels) level.GetComponent<PrisonLevel>().ToggleLockdown(lockdown);
-        }
+        // if (Input.GetKeyDown(KeyCode.Q)) {
+        //     lockdown = !lockdown;
+        //     foreach (Transform level in prisonLevels) level.GetComponent<PrisonLevel>().ToggleLockdown(lockdown);
+        // }
+        if (Input.GetKeyDown(KeyCode.Escape)) TogglePause();
         loopIndicator.fillAmount = 1 - (playerTA.timer / TimeloopAffected.maxTimer);
     }
 
@@ -130,7 +132,7 @@ public class GameManager : MonoBehaviour
     public void UpdateLockdown()
     {
         lockdown = level != 0 && !guardOffice.IsSubstituteComplete();
-        foreach (Transform level in prisonLevels) level.GetComponent<PrisonLevel>().ToggleLockdown(lockdown);
+        foreach (Transform pLevel in prisonLevels) pLevel.GetComponent<PrisonLevel>().ToggleLockdown(lockdown && pLevel.name.Contains(level.ToString()));
     }
 
     void SetAlphaOfChildren(Transform parent, float alpha)
@@ -167,6 +169,8 @@ public class GameManager : MonoBehaviour
 
     List<TimeloopAffected> timeloopAffecteds = new List<TimeloopAffected>();
 
+    public HashSet<string> usedItems = new HashSet<string>();
+
     public void AddTimeloopAffected(TimeloopAffected ta)
     {
         timeloopAffecteds.Add(ta);
@@ -175,18 +179,61 @@ public class GameManager : MonoBehaviour
     public void RevertPlayer()
     {
         playerTA.Revert();
-        player.WipeGameData(); // -> the character forgets, though the player doesn't? idk if comment or leave
-        player.prisonHolder.rotation = Quaternion.identity;
+        // player.WipeGameData(); // -> the character forgets, though the player doesn't? idk if comment or leave
+        player.prisonHolder.rotation = Quaternion.Euler(0f,0f,30f);
         player.bubbleTools.Clear();
         ChangeLevel(0);
     }
 
     public void PlaceBubble(Vector3 position)
     {
+        Debug.Log("placing bubble");
         GameObject bubble = Instantiate(bubblePrefab,position,Quaternion.identity,extraBubbleHolder);
         bubble.name = $"l{level}bubble";
         if (player.GetGameData("placedfirstbubble") == null) StartCoroutine(DelayedShowText("Yikes, that bubble looks unstable. Hopefully it doesn't break on me.",0.6f));
         player.UpdateGameData("placedfirstbubble","true");
+    }
+
+    #endregion
+
+    #region Pause Menu
+
+    public GameObject pauseUI;
+    List<TimeloopAffected> allTA = new List<TimeloopAffected>();
+
+    public void AddTA(TimeloopAffected ta)
+    {
+        allTA.Add(ta);
+    }
+
+    public void Resume()
+    {
+        TogglePause();
+    }
+
+    void TogglePause()
+    {
+        bool prevActive = pauseUI.activeSelf;
+        pauseUI.SetActive(!prevActive);
+        SetPause(!prevActive);
+        blockInput = !prevActive;
+        if (prevActive) Cursor.visible = false;
+        else Cursor.visible = true;
+    }
+
+    public void Restart()
+    {
+        TogglePause();
+        player.placedBubbletools.Clear();
+        player.bubbleTools.Clear();
+        player.WipeGameData();
+        foreach (TimeloopAffected ta in allTA) ta.Revert();
+        RevertPlayer();
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     #endregion

@@ -9,8 +9,7 @@ public class ScrapCarriable : Carriable
     
     void Start()
     {
-        BaseStart();
-        priorityInteractable = true;
+        BaseStart("");
     }
 
     public void SetupSC(GameManager gm, Player player, ScrapItem inItem)
@@ -18,6 +17,7 @@ public class ScrapCarriable : Carriable
         this.gm = gm;
         this.player = player;
         item = inItem;
+        itemName = inItem.name;
         sr.sprite = item.GetSprite();
     }
 

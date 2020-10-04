@@ -14,8 +14,8 @@ public class PrisonLevel : MonoBehaviour
     {
         level = int.Parse(gameObject.name.Substring(5));
         // generate lockdown alarms
-        float r = 2.88f + level * 0.625f;
-        int n = 10;
+        float r = 3f + level * 0.625f;
+        int n = 15 + level*3;
         float radPart = (Mathf.PI * 2f) / n;
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         for (int i = 0; i < n; i++) {

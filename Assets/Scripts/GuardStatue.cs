@@ -6,6 +6,6 @@ public class GuardStatue : Draggable
 {
     void Start()
     {
-        DraggableSetup();
+        DraggableSetup("Frozen guard");
     }
 }

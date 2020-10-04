@@ -53,8 +53,8 @@ public class Bubble : MonoBehaviour
 
     public void ToggleVisuals(bool active)
     {
-        hidden = true;
+        hidden = !active;
         spriteMask.enabled = active;
-        sr.color = new Color(sr.color.r,sr.color.g,sr.color.b,0f);
+        if (!active) sr.color = new Color(sr.color.r,sr.color.g,sr.color.b,0f);
     }
 }

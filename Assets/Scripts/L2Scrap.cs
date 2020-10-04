@@ -7,7 +7,7 @@ public class L2Scrap : ScrapPile
     // Start is called before the first frame update
     void Start()
     {
-        BaseStart();
+        BaseStart("Pile of scrap");
         ScrapPileSetup();
     }
 

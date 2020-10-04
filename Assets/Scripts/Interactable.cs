@@ -9,11 +9,13 @@ public abstract class Interactable : MonoBehaviour
     public abstract void Interact();
     public abstract void ResetState(); // called on timeloop trigger
     public bool priorityInteractable = false;
+    public string hintName;
 
-    protected void BaseStart()
+    protected void BaseStart(string hintName)
     {
         gm = FindObjectOfType<GameManager>();
         player = FindObjectOfType<Player>();
+        this.hintName = hintName;
     }
 
     public abstract bool IsValidInteractable();

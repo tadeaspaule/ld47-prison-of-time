@@ -4,32 +4,40 @@ using UnityEngine;
 
 public class GuardOffice : Interactable
 {
+    public Door l0Door;
     public GameObject keycardPrefab;
-    int presenceMaskerPartsAdded = 0;
-    public static int maxMaskerParts = 3;
     bool substituteCompelete = false;
     bool tookKeycard = false;
     string[] maskerPartNames = new string[]{"Bio-heater","Radio transmitter","Signal scrambler"};
+    Dictionary<string,string> concreteToVague = new Dictionary<string, string>();
     List<string> neededMaskerParts = new List<string>();
 
     void Start()
     {
-        BaseStart();
+        BaseStart("Guard office");
         foreach (string n in maskerPartNames) neededMaskerParts.Add(n);
+        concreteToVague.Add("Bio-heater","something to fake my bodyheat");
+        concreteToVague.Add("Radio transmitter","something to transmit a signal");
+        concreteToVague.Add("Signal scrambler","something to fake my suit's signal");
     }
     public override void Interact()
     {
         if (player.carrying && player.carrying.tag.Equals("presenceMaskerPart")) {
-            presenceMaskerPartsAdded++;
             neededMaskerParts.Remove(player.carrying.name);
             player.carrying.UseCarriable();
-            if (presenceMaskerPartsAdded == maxMaskerParts) {
-                gm.ShowText("great masker is complete");
-            substituteCompelete = true;
-            gm.UpdateLockdown();
+            if (neededMaskerParts.Count == 0) {
+                gm.ShowTextChain(new string[]{
+                    "Aaand done! This should fake my presence at the prisoner level.",
+                    "Hopefully the lockdown alarms are down once I go out there again. Only one way to find out..."
+                });
+                substituteCompelete = true;
+                gm.UpdateLockdown();
             }
             else {
-                gm.ShowText($"I still need {string.Join(" and ",neededMaskerParts)}");
+                string t = "I still need ";
+                for (int i = 0; i < neededMaskerParts.Count; i++) t += concreteToVague[neededMaskerParts[i]] + " and ";
+                t = t.Substring(0,t.Length-5) + ".";
+                gm.ShowText(t);
             }
         }
         else if (!player.carrying && !player.dragging && !tookKeycard) {
@@ -43,13 +51,20 @@ public class GuardOffice : Interactable
             });
             tookKeycard = true;
         }
+        else if (tookKeycard) {
+            gm.ShowTextChain(new string[]{
+                "What a gruesome sight...",
+                "...",
+                "Ahem, right. Escape first, sadness second.",
+                "Besides that keycard, the guard office doesn't have anything useful."
+            });
+        }
     }
     public override void ResetState()
     {
-        player.dragging = null;
-        presenceMaskerPartsAdded = 0;
         substituteCompelete = false;
         tookKeycard = false;
+        if (l0Door.hasBeenUnlocked) tookKeycard = true;
         neededMaskerParts.Clear();
         foreach (string n in maskerPartNames) neededMaskerParts.Add(n);
     }

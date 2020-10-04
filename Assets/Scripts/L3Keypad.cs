@@ -13,7 +13,7 @@ public class L3Keypad : Interactable
 
     void Start()
     {
-        BaseStart();
+        BaseStart("Keypad");
         correctCode = "";
         for (int i = 0; i < 6; i++) correctCode += r.Next(10);
         Debug.Log(correctCode);
@@ -23,9 +23,10 @@ public class L3Keypad : Interactable
     {
         if (gm.paused) return;
         if (!keypadUI.gameObject.activeSelf) return;
-        if (Input.GetKeyDown(KeyCode.E)) {
+        if (Input.GetKeyDown(KeyCode.Q)) {
             keypadUI.gameObject.SetActive(false);
             StartCoroutine(DelayedEnableInput());
+            Cursor.visible = false;
         }
     }
     

@@ -12,7 +12,7 @@ public class L3PC : Interactable
     Color offColor = new Color(0.4f,0.4f,0.4f);
     void Start()
     {
-        BaseStart();
+        BaseStart("Pile of scrap");
         foreach (string n in partNames) neededParts.Add(n);
         keypad = FindObjectOfType<L3Keypad>();
         pcScreen = transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
@@ -34,10 +34,12 @@ public class L3PC : Interactable
                 "Hopefully I can find a power source somewhere, as well as a way to hook it up."
             });
             pcModel.SetActive(true);
+            hintName = "Computer";
+            player.UpdateHintText();
             sr.enabled = false;
             pcScreen.color = offColor;
             player.UpdateGameData("foundl3pc","true");
-            player.currentInteractables.Remove(this);
+            // player.currentInteractables.Remove(this);
         }
         else if (player.carrying && player.carrying.tag.Equals("pcPart")) {
             neededParts.Remove(player.carrying.name);
@@ -51,6 +53,13 @@ public class L3PC : Interactable
                 });
             }
             else if (neededParts[0] == "Fuel cell") gm.ShowText($"I still need a power source");
+            else gm.ShowText($"I still need a way to connect the fuel cell to the computer");
+        }
+        else if (neededParts.Count == 0) {
+            gm.ShowText($"The passcode is {keypad.correctCode}");
+        }
+        else if (!player.carrying && !player.dragging) {
+            if (neededParts[0] == "Fuel cell") gm.ShowText($"I still need a power source");
             else gm.ShowText($"I still need a way to connect the fuel cell to the computer");
         }
     }

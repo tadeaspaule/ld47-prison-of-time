@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
     public Transform prisonHolder;
+    public TextMeshProUGUI interactHintText;
     Dictionary<string,string> gamedata = new Dictionary<string, string>();
     GameManager gm;
     Transform objectHolder;
-    float sideMovement = 240f;
+    float sideMovement = 120f;
     bool moving = false;
     float movingTilt = 0f;
     float movingMaxTilt = 7f;
@@ -57,6 +59,7 @@ public class Player : MonoBehaviour
                 Debug.Log(i);
                 if (i) i.Interact();
             }
+            UpdateHintText();
         }
         if (Input.GetKeyDown(KeyCode.Space) && bubbleTools.Count > 0) {
             gm.PlaceBubble(transform.position+Vector3.up * 0.25f);
@@ -73,6 +76,7 @@ public class Player : MonoBehaviour
         Debug.Log($"enter {other.gameObject.name}");
         Interactable i = other.GetComponent<Interactable>();
         if (i) currentInteractables.Add(i);
+        UpdateHintText();
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -80,6 +84,7 @@ public class Player : MonoBehaviour
         Debug.Log($"exit {other.gameObject.name}");
         Interactable i = other.GetComponent<Interactable>();
         if (i) currentInteractables.Remove(i);
+        UpdateHintText();
     }
 
     Interactable GetFirstInteractable()
@@ -110,5 +115,12 @@ public class Player : MonoBehaviour
     public void WipeGameData()
     {
         gamedata.Clear();
+    }
+
+    public void UpdateHintText()
+    {
+        Interactable i = GetFirstInteractable();
+        if (i) interactHintText.text = i.hintName;
+        else interactHintText.text = "";
     }
 }

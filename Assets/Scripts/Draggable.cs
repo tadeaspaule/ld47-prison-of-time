@@ -6,9 +6,9 @@ public abstract class Draggable : Interactable
 {    
     Transform oParent;
 
-    protected void DraggableSetup()
+    protected void DraggableSetup(string hintName)
     {
-        BaseStart();
+        BaseStart(hintName);
         priorityInteractable = true;
         oParent = transform.parent;
     }

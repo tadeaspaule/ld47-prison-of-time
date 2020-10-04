@@ -5,10 +5,11 @@ using UnityEngine;
 public class Carriable : Interactable
 {    
     public bool destroyOnUse = true;
+    protected string itemName;
     
     void Start()
     {
-        BaseStart();
+        BaseStart("");
         priorityInteractable = true;
     }
 
@@ -36,6 +37,7 @@ public class Carriable : Interactable
     public void UseCarriable()
     {
         transform.position = new Vector3(50f,50f,0f); // to hide it
+        gm.usedItems.Add(itemName);
         player.carrying = null;
         if (destroyOnUse) Destroy(gameObject);
     }

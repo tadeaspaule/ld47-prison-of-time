@@ -38,5 +38,6 @@ public class L3KeypadUI : MonoBehaviour
         Debug.Log("openkeypadui");
         gameObject.SetActive(true);
         this.correctCode = correctCode;
+        Cursor.visible = true;
     }
 }

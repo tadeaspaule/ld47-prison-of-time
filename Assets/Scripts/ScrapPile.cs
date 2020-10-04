@@ -5,24 +5,25 @@ using UnityEngine;
 public abstract class ScrapPile : Interactable
 {
     public List<ScrapItem> items;
+    List<ScrapItem> originalItems = new List<ScrapItem>();
     protected ScavangeScreen scavangeScreen;
 
     protected void ScrapPileSetup()
     {
-        // Debug.Log()
         scavangeScreen = gm.scavangeScreen;
+        foreach (ScrapItem i in items) originalItems.Add(i);
     }
 
     public override void Interact()
     {
+        ResetState(); // kinda cheat but so that it's not annoying for players
         if (items.Count > 0) scavangeScreen.OpenScreen(items);
-        else gm.ShowText("nothing more in this pile");
+        else gm.ShowText("Only junk left in this pile");
     }
 
     public override void ResetState()
     {
-        Debug.Log("scrap reset");
-        // player.carrying = null;
+        items = originalItems.FindAll(i => !gm.usedItems.Contains(i.name));
     }
 
     protected bool BasicIsValidInteractable()

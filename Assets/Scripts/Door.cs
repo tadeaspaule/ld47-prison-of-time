@@ -8,7 +8,7 @@ public class Door : Interactable
     bool opening = false;
     public bool isOpen = false;
     public bool isDoorUp = true;
-    bool hasBeenUnlocked = false;
+    public bool hasBeenUnlocked = false;
     L3Keypad l3Keypad;
     Scanner[] scanners;
     
@@ -16,7 +16,7 @@ public class Door : Interactable
     void Start()
     {
         scanners = FindObjectsOfType<Scanner>();
-        BaseStart();
+        BaseStart("Door");
         doorCover = transform.GetChild(0);
         l3Keypad = FindObjectOfType<L3Keypad>();
     }
@@ -62,6 +62,7 @@ public class Door : Interactable
 
     bool CanOpen()
     {
+        // return true;
         if (gameObject.name.Equals("l0doorsup")) {
             return (player.carrying && player.carrying.name.Contains("keycard"));
         }
