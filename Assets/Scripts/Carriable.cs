@@ -22,10 +22,10 @@ public class Carriable : Interactable
     {
         player.carrying = this;
         player.currentInteractables.Remove(this);
-        transform.parent = player.transform;
-        transform.localPosition = Vector3.zero;
+        transform.parent = player.transform.GetChild(0);
+        transform.localPosition = Vector3.right * 0.3f;
         transform.rotation = Quaternion.identity;
-        gm.ShowText($"picked up {gameObject.name}");
+        // gm.ShowText($"picked up {gameObject.name}");
     }
 
     public override void ResetState()

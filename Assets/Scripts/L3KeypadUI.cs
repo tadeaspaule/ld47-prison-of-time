@@ -35,6 +35,7 @@ public class L3KeypadUI : MonoBehaviour
 
     public void OpenKeypad(string correctCode)
     {
+        Debug.Log("openkeypadui");
         gameObject.SetActive(true);
         this.correctCode = correctCode;
     }

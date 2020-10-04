@@ -9,7 +9,7 @@ public class GuardOffice : Interactable
     public static int maxMaskerParts = 3;
     bool substituteCompelete = false;
     bool tookKeycard = false;
-    string[] maskerPartNames = new string[]{"MASKERPART1","MASKERPART2","MASKERPART3"};
+    string[] maskerPartNames = new string[]{"Bio-heater","Radio transmitter","Signal scrambler"};
     List<string> neededMaskerParts = new List<string>();
 
     void Start()
@@ -36,7 +36,11 @@ public class GuardOffice : Interactable
             GameObject go = Instantiate(keycardPrefab,Vector3.zero,Quaternion.identity);
             Carriable c = go.GetComponent<Carriable>();
             c.ForceSetup(player,gm);
-            c.Interact();
+            c.Interact(); // picks it up
+            gm.ShowTextChain(new string[]{
+                "The guards are dead!?",
+                "Right, no time, no time. I'll take their keycard and worry about what's happening later."
+            });
             tookKeycard = true;
         }
     }

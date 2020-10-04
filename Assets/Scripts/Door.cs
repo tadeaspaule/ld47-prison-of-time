@@ -8,11 +8,14 @@ public class Door : Interactable
     bool opening = false;
     public bool isOpen = false;
     public bool isDoorUp = true;
+    bool hasBeenUnlocked = false;
     L3Keypad l3Keypad;
+    Scanner[] scanners;
     
     // Start is called before the first frame update
     void Start()
     {
+        scanners = FindObjectsOfType<Scanner>();
         BaseStart();
         doorCover = transform.GetChild(0);
         l3Keypad = FindObjectOfType<L3Keypad>();
@@ -31,28 +34,20 @@ public class Door : Interactable
     }
     public override void Interact()
     {
-        Debug.Log(isOpen);
         if (!isOpen) {
             if (isDoorUp) {
-                // TODO check interaction condition
-                if (gameObject.name.Equals("l0doorsup")) {
-                    Debug.Log(player.carrying);
-                    if (!player.carrying || !player.carrying.name.Contains("keycard")) return;
-                    else {
-                        player.carrying.UseCarriable();
+                if (!hasBeenUnlocked) {
+                    // door unlock interaction - any special things that need to happen
+                    if (!CanOpen()) return;
+                    hasBeenUnlocked = true;
+                    if (gameObject.name.Equals("l0doorsup")) {
+                        Debug.Log(player.carrying);
+                        if (!player.carrying || !player.carrying.name.Contains("keycard")) return;
+                        else {
+                            player.carrying.UseCarriable();
+                        }
                     }
                 }
-                else if (gameObject.name.Equals("l1doorsup")) {
-                    Scanner[] scanners = FindObjectsOfType<Scanner>();
-                    foreach (Scanner s in scanners) if (!s.scannerHappy) return;
-                }
-                else if (gameObject.name.Equals("l2doorsup")) {
-                    if (gm.lockdown) return;
-                }
-                else if (gameObject.name.Equals("l3doorsup")) {
-                    if (!l3Keypad.keypadOpened) return;
-                }
-                else return; // catch-all so doors don't open without condition met
                 opening = true;
             }
             else opening = true; // just open doors down, no conditions needed
@@ -61,14 +56,39 @@ public class Door : Interactable
             // interact with open door, go up/down
             if (isDoorUp) gm.GoUp();
             else gm.GoDown();
+            CloseDoor();
         }
     }
 
-    public override void ResetState()
+    bool CanOpen()
+    {
+        if (gameObject.name.Equals("l0doorsup")) {
+            return (player.carrying && player.carrying.name.Contains("keycard"));
+        }
+        else if (gameObject.name.Equals("l1doorsup")) {
+            foreach (Scanner s in scanners) if (!s.scannerHappy) return false;
+            return true;
+        }
+        else if (gameObject.name.Equals("l2doorsup")) {
+            return !gm.lockdown;
+        }
+        else if (gameObject.name.Equals("l3doorsup")) {
+            return l3Keypad.keypadOpened;
+        }
+        return false;
+    }
+
+    void CloseDoor()
     {
         doorCover.localPosition = Vector3.zero;
         opening = false;
         isOpen = false;
     }
-    public override bool IsValidInteractable() {return true;}
+
+    public override void ResetState()
+    {
+        CloseDoor();
+        hasBeenUnlocked = false;
+    }
+    public override bool IsValidInteractable() {Debug.Log(CanOpen());return isOpen || !isDoorUp || hasBeenUnlocked || CanOpen();}
 }

@@ -13,9 +13,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ChangeLevel(3);
+        ChangeLevel(1);
         playerTA = player.GetComponent<TimeloopAffected>();
-            
     }
 
     // Update is called once per frame
@@ -78,6 +77,12 @@ public class GameManager : MonoBehaviour
         SetPause(true);
     }
 
+    IEnumerator DelayedShowText(string text, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ShowText(text);
+    }
+
     IEnumerator DelayedSetShowingText()
     {
         yield return new WaitForEndOfFrame();
@@ -109,17 +114,15 @@ public class GameManager : MonoBehaviour
 
     void ChangeLevel(int newLevel)
     {
-        SpriteRenderer sr;
+        level = newLevel;
         for (int i = 0; i < 4; i++) {
-            // float alpha = i == newLevel ? 1f : 0f;
-            // foreach (Transform levelChild in prisonLevels[i]) {
-            //     SetAlphaOfChildren(levelChild,alpha);
-            // }
-            // sr = prisonLevels[i].GetComponent<SpriteRenderer>();
-            // sr.color = alpha > 0.5f ? litLevelColor : Color.black;
             levelHiders[i].SetActive(i != newLevel);
         }
-        level = newLevel;
+        foreach (Transform bubble in extraBubbleHolder) {
+            // hide bubbles on other levels so you don't see through surfaces
+            bool bubbleEnabled = bubble.gameObject.name.StartsWith($"l{level}");
+            bubble.GetComponent<Bubble>().ToggleVisuals(bubbleEnabled);
+        }
         player.transform.position = Vector3.up * (2.52f + newLevel * 0.625f);
         UpdateLockdown();
     }
@@ -159,6 +162,8 @@ public class GameManager : MonoBehaviour
 
     public Image loopIndicator;
     TimeloopAffected playerTA;
+    public GameObject bubblePrefab;
+    public Transform extraBubbleHolder;
 
     List<TimeloopAffected> timeloopAffecteds = new List<TimeloopAffected>();
 
@@ -171,8 +176,17 @@ public class GameManager : MonoBehaviour
     {
         playerTA.Revert();
         player.WipeGameData(); // -> the character forgets, though the player doesn't? idk if comment or leave
-        prisonLevels[0].parent.rotation = Quaternion.identity;
+        player.prisonHolder.rotation = Quaternion.identity;
+        player.bubbleTools.Clear();
         ChangeLevel(0);
+    }
+
+    public void PlaceBubble(Vector3 position)
+    {
+        GameObject bubble = Instantiate(bubblePrefab,position,Quaternion.identity,extraBubbleHolder);
+        bubble.name = $"l{level}bubble";
+        if (player.GetGameData("placedfirstbubble") == null) StartCoroutine(DelayedShowText("Yikes, that bubble looks unstable. Hopefully it doesn't break on me.",0.6f));
+        player.UpdateGameData("placedfirstbubble","true");
     }
 
     #endregion

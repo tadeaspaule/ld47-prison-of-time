@@ -11,9 +11,16 @@ public class L2Scrap : ScrapPile
         ScrapPileSetup();
     }
 
+    public override void Interact()
+    {
+        if (player.GetGameData("sawl2keypad") == null) gm.ShowText("A pile of scrap, bits and pieces of various technology. I wonder why that's here.");
+        else base.Interact();
+    }
+
     public override bool IsValidInteractable()
     {
-        string v = player.GetGameData("sawl2keypad");
-        return (BasicIsValidInteractable() && v != null && v.Equals("true"));
+        return BasicIsValidInteractable();
+        // string v = player.GetGameData("sawl2keypad");
+        // return (BasicIsValidInteractable() && v != null && v.Equals("true"));
     }
 }

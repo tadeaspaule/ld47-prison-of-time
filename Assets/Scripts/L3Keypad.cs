@@ -37,17 +37,23 @@ public class L3Keypad : Interactable
 
     public override void Interact()
     {
+        Debug.Log("keypad interact");
         if (player.GetGameData("sawl3keypad") == null) {
             gm.ShowTextChain(new string[] {
-                "o no no time to guess",
-                "should look around the scrap piles for something"
+                "Damn, looks like the final layer of security is a good old passcode, and I really don't have time for guessing.",
+                "I should look around those scrap piles I passed, maybe I'll find something to help me."
             });
             player.UpdateGameData("sawl3keypad","true");
         }
-        keypadUI.OpenKeypad(correctCode);
+        StartCoroutine(DelayedOpenKeypad());
         gm.blockInput = true;
         // allowKeypadInput = true;
         player.currentInteractables.Remove(this);
+    }
+    IEnumerator DelayedOpenKeypad()
+    {
+        yield return new WaitForEndOfFrame();
+        keypadUI.OpenKeypad(correctCode);
     }
     public override void ResetState()
     {

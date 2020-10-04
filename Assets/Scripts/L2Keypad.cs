@@ -34,8 +34,8 @@ public class L2Keypad : Interactable
     {
         keypadUI.SetActive(true);
         gm.ShowTextChain(new string[] {
-            "o no lockdown",
-            "should look around the scrap piles"
+            "Damn! This door will only let me through if I'm in my cell, but then I can't go through...",
+            "I need to fake my presence somehow, I should look around for something that does that."
         });
         gm.blockInput = true;
         // allowKeypadInput = true;
@@ -46,5 +46,5 @@ public class L2Keypad : Interactable
     {
         
     }
-    public override bool IsValidInteractable() {return true;}
+    public override bool IsValidInteractable() {return gm.lockdown;}
 }

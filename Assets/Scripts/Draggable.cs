@@ -17,10 +17,11 @@ public abstract class Draggable : Interactable
     {
         player.dragging = this;
         player.currentInteractables.Remove(this);
-        transform.parent = player.transform;
+        transform.parent = player.transform.GetChild(0);
+        transform.localPosition = new Vector3(0.5f,-0.5f,0f);
         // transform.localPosition = Vector3.zero;
         // transform.rotation = Quaternion.identity;
-        gm.ShowText($"dragging {gameObject.name}");
+        // gm.ShowText($"dragging {gameObject.name}");
     }
     public override void Interact()
     {

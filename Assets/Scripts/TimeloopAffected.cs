@@ -17,8 +17,10 @@ public class TimeloopAffected : MonoBehaviour
     GameManager gm;
 
     public float timer = 0f;
-    public static float maxTimer = 500f;
+    public static int maxTimer = 300;
     bool inBubble = false;
+
+    public bool resetParent = true;
 
 
 
@@ -56,16 +58,17 @@ public class TimeloopAffected : MonoBehaviour
     {        
         if (inBubble) {
             Debug.Log($"{gameObject.name} in bubble");
-            return;
+            throw new System.Exception("reverting object in bubble");
         }
+        timer = 0f;
         gameObject.SetActive(true);
-        transform.parent = oParent;
+        if (resetParent) transform.parent = oParent;
         transform.localPosition = oPosition;
-        transform.localRotation = oRotation;
-        if (sr) {
-            sr.sprite = oSprite;
-            sr.color = oColor;
-        }
+        // transform.localRotation = oRotation;
+        // if (sr) {
+        //     sr.sprite = oSprite;
+        //     sr.color = oColor;
+        // }
         if (interactable) interactable.ResetState();
     }
 

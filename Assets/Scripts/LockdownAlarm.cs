@@ -8,8 +8,8 @@ public class LockdownAlarm : MonoBehaviour
     public Light2D light2D;
     float startValue;
     bool growing = true;
-    float diff = 0.6f;
-    float changeMult = 3f;
+    float diff = 0.2f;
+    float changeMult = 0.5f;
     
     // Start is called before the first frame update
     void Start()

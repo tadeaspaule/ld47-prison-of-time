@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameObject bubblePrefab;
-    public Transform extraBubbleHolder;
     public Transform prisonHolder;
     Dictionary<string,string> gamedata = new Dictionary<string, string>();
     GameManager gm;
-    float sideMovement = 300f;
+    Transform objectHolder;
+    float sideMovement = 240f;
+    bool moving = false;
+    float movingTilt = 0f;
+    float movingMaxTilt = 7f;
+    float movingTiltSpd = 100f;
+    public List<string> bubbleTools = new List<string>();
+    public List<string> placedBubbletools = new List<string>();
     
     // Start is called before the first frame update
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
+        objectHolder = transform.GetChild(0);
     }
 
     // Update is called once per frame
@@ -25,16 +31,37 @@ public class Player : MonoBehaviour
         float rotateSpeed = (sideMovement * Time.deltaTime) / transform.position.magnitude;
         if (Input.GetKey(KeyCode.D)) {
             prisonHolder.Rotate(0f,0f,rotateSpeed);
+            moving = true;
+            objectHolder.rotation = Quaternion.identity;
         }
         else if (Input.GetKey(KeyCode.A)) {
             prisonHolder.Rotate(0f,0f,-rotateSpeed);
+            objectHolder.rotation = Quaternion.Euler(0f,180f,0f);
+            moving = true;
         }
+        else moving = false;
+        if (moving) {
+            movingTilt += Time.deltaTime * movingTiltSpd;
+            transform.rotation = Quaternion.Euler(0f,0f,movingTilt);
+            if (movingTilt >= movingMaxTilt) movingTilt = movingMaxTilt;
+            else if (movingTilt <= -movingMaxTilt) movingTilt = -movingMaxTilt;
+            if (movingTilt >= movingMaxTilt || movingTilt <= -movingMaxTilt) movingTiltSpd *= -1;
+        }
+        else transform.rotation = Quaternion.identity;
         if (Input.GetKeyDown(KeyCode.E)) {
+            // List<Interactable> validInteractables = GetValidInteractables();
+            // Debug.Log(validInteractables);
             if (dragging) dragging.LetGo();
-            else if (GetValidInteractables().Count > 0) GetFirstInteractable().Interact();
+            else {
+                Interactable i = GetFirstInteractable();
+                Debug.Log(i);
+                if (i) i.Interact();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            GameObject bubble = Instantiate(bubblePrefab,transform.position+Vector3.up * 0.25f,Quaternion.identity,extraBubbleHolder);
+        if (Input.GetKeyDown(KeyCode.Space) && bubbleTools.Count > 0) {
+            gm.PlaceBubble(transform.position+Vector3.up * 0.25f);
+            placedBubbletools.Add(bubbleTools[0]);
+            bubbleTools.RemoveAt(0);
         }
     }
 
